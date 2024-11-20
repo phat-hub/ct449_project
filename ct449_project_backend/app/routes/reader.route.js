@@ -13,4 +13,10 @@ router.route("/:id")
     .put(readers.update)
     .delete(readers.delete);
 
+router.route("/checkMadocgia")
+    .post(readers.checkMadocgia);
+
+router.route("/checkDienthoai")
+    .post(readers.checkDienthoai);
+
 module.exports = router;

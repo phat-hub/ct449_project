@@ -12,6 +12,7 @@
 <script>
 import BookForm from "@/components/BookForm.vue";
 import BookService from "@/services/book.service";  // Service cho sách, cần tạo service tương ứng
+import PublisherService from "@/services/publisher.service";
 
 export default {
     components: {
@@ -38,6 +39,11 @@ export default {
                 const response = await BookService.checkMasach(bookData.masach);
                 if (response.exists) {
                     alert("Mã sách đã tồn tại.");
+                    return;
+                }
+                const response1 = await PublisherService.checkManxb(bookData.manxb);
+                if (!response1.exists) {
+                    alert("Nhà xuất bản không tồn tại.");
                     return;
                 }
                 await BookService.create(bookData); 

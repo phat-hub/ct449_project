@@ -75,6 +75,16 @@ class ReaderService {
         const result = await this.Reader.deleteMany({});
         return result.deletedCount;
     }
+
+    async checkMadocgia(madocgia) {
+        const reader = await this.Reader.findOne({ madocgia }); // Tìm độc giả với mã madocgia
+        return reader ? true : false; // Nếu tìm thấy, trả về true, không tìm thấy trả về false
+    }
+
+    async checkDienthoai(dienthoai) {
+        const phone = await this.Phone.findOne({ dienthoai }); // Tìm điện thoại với mã dienthoai
+        return phone ? true : false; // Nếu tìm thấy, trả về true, không tìm thấy trả về false
+    }
 }
 
 module.exports = ReaderService;

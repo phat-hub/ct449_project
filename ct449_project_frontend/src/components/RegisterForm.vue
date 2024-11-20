@@ -63,7 +63,7 @@ export default {
                     .string()
                     .required("Mã số nhân viên không được để trống.")
                     .min(5, "Mã số nhân viên ít nhất 5 ký tự.")
-                    .max(6, "Mã số nhân viên tối đa 6 ký tự.")
+                    .max(5, "Mã số nhân viên tối đa 5 ký tự.")
                     .matches(/^NV\d{3}$/, "Mã số nhân viên phải theo định dạng NVxxx, trong đó xxx là 3 chữ số."),
                 hotennv: yup
                     .string()

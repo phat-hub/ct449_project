@@ -70,6 +70,11 @@ class PublisherService {
         const result = await this.Publisher.deleteMany({});
         return result.deletedCount;
     }
+
+    async checkManxb(manxb) {
+        const publisher = await this.Publisher.findOne({ manxb });
+        return publisher ? true : false;
+    }
 }
 
 module.exports = PublisherService;

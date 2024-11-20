@@ -73,3 +73,41 @@ exports.deleteAll = async (req, res, next) => {
         return next(new ApiError(500, "An error occurred while removing all readers"));
     }
 };
+
+exports.checkMadocgia = async (req, res, next) => {
+    try {
+        const { madocgia } = req.body;
+        if (!madocgia) {
+            return next(new ApiError(400, "Thiếu mã độc giả"));
+        }
+
+        const readerService = new ReaderService(MongoDB.client); // Hoặc tương tự
+        const exists = await readerService.checkMadocgia(madocgia);
+
+        return res.send({
+            exists,
+            message: exists ? "Mã độc giả đã tồn tại" : "Mã độc giả chưa tồn tại",
+        });
+    } catch (error) {
+        return next(new ApiError(500, "An error occurred while checking madocgia"));
+    }
+};
+
+exports.checkDienthoai = async (req, res, next) => {
+    try {
+        const { dienthoai } = req.body;
+        if (!dienthoai) {
+            return next(new ApiError(400, "Thiếu mã điện thoại"));
+        }
+
+        const phoneService = new PhoneService(MongoDB.client); // Hoặc tương tự
+        const exists = await phoneService.checkDienthoai(dienthoai);
+
+        return res.send({
+            exists,
+            message: exists ? "Mã điện thoại đã tồn tại" : "Mã điện thoại chưa tồn tại",
+        });
+    } catch (error) {
+        return next(new ApiError(500, "An error occurred while checking dienthoai"));
+    }
+};

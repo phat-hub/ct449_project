@@ -1,6 +1,6 @@
 import createApiClient from "./api.service";
-class BookService {
-    constructor(baseUrl = "/api/books") {
+class ReaderService {
+    constructor(baseUrl = "/api/readers") {
         this.api = createApiClient(baseUrl);
     }
     async getAll() {
@@ -21,11 +21,14 @@ class BookService {
     async delete(id) {
         return (await this.api.delete(`/${id}`)).data;
     }
-    async checkMasach(masach) {
-        return (await this.api.post("/checkMasach", { masach })).data;
-    }
     async checkManxb(manxb) {
-        return (await this.api.post("/checkManxb", { manxb })).data; // Gọi API từ backend
+        return (await this.api.post("/checkManxb", { manxb })).data;
+    }
+    async checkMadocgia(madocgia) {
+        return (await this.api.post("/checkMadocgia", { madocgia })).data;
+    }
+    async checkDienthoai(dienthoai) {
+        return (await this.api.post("/checkDienthoai", { dienthoai })).data;
     }
 }
-export default new BookService();
+export default new ReaderService();

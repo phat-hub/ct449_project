@@ -71,4 +71,23 @@ exports.deleteAll = async (req, res, next) => {
     }
 };
 
+exports.checkManxb = async (req, res, next) => {
+    try {
+        const { manxb } = req.body;
+        if (!manxb) {
+            return next(new ApiError(400, "Thiếu mã nhà xuất bản"));
+        }
+
+        const publisherService = new PublisherService(MongoDB.client);
+        const exists = await publisherService.checkManxb(manxb);
+
+        return res.send({
+            exists,
+            message: exists ? "Mã nhà xuất bản đã tồn tại" : "Mã nhà xuất bản chưa tồn tại",
+        });
+    } catch (error) {
+        return next(new ApiError(500, "An error occurred while checking manxb"));
+    }
+};
+
 

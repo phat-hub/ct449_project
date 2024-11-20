@@ -9,6 +9,7 @@
 <script>
 import BookForm from "@/components/BookForm.vue";
 import BookService from "@/services/book.service";  // Service cho sách, cần tạo service tương ứng
+import PublisherService from "@/services/publisher.service";
 export default {
     components: {
         BookForm,
@@ -41,6 +42,11 @@ export default {
         },
         async updateBook(data) {
             try {
+                const response = await PublisherService.checkManxb(data.manxb);
+                if (!response.exists) {
+                    alert("Nhà xuất bản không tồn tại.");
+                    return;
+                }
                 await BookService.update(this.book._id, data);
                 alert('Sách được cập nhật thành công.');
                 this.$router.push({ name: "book" });  // Điều hướng đến trang danh sách sách

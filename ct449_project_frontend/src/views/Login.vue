@@ -26,18 +26,19 @@ export default {
     methods: {
         async login(employeeData) {
             try {
-                const status = await EmployeeService.login(employeeData.msnv, employeeData.password); 
-                console.log(status);
-                if (status.exists) {
-                    alert("Đăng nhập thành công");
-                    this.$router.push({ name: "book" }); 
+                const response = await EmployeeService.login(employeeData.msnv, employeeData.password);
+                if (response.success) {
+                    alert(response.message);
+                    // Lưu token vào LocalStorage
+                    localStorage.setItem("authToken", response.token);
+                    this.$router.push({ name: "book" });
                 } else {
-                    alert("Tài khoản hoặc mật khẩu không chính xác.");
+                    alert(response.message);
                 }
             } catch (error) {
                 console.log(error);
             }
-        },
+        }
     },
 };
 </script>

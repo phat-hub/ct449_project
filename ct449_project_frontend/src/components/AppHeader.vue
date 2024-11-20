@@ -17,8 +17,8 @@
         </li>
       </ul>
 
-      <!-- Avatar và menu xổ xuống -->
-      <div class="dropdown">
+      <!-- Avatar và menu xổ xuống (nếu đã đăng nhập) -->
+      <div v-if="isLoggedIn" class="dropdown">
         <img
           src="https://cellphones.com.vn/sforum/wp-content/uploads/2023/10/avatar-trang-4.jpg"
           alt="Avatar"
@@ -37,30 +37,60 @@
           </li>
         </ul>
       </div>
+
+      <!-- Nút đăng nhập và đăng ký (nếu chưa đăng nhập) -->
+      <div v-else>
+        <router-link class="btn btn-outline-light me-2 btn-custom" to="/">Đăng nhập</router-link>
+        <router-link class="btn btn-outline-light btn-custom" to="/register">Đăng ký</router-link>
+      </div>
     </div>
   </nav>
 </template>
 
+
 <script>
 export default {
+  data() {
+    return {
+      isLoggedIn: false, // Trạng thái đăng nhập
+    };
+  },
   methods: {
+    checkAuthStatus() {
+      // Kiểm tra token trong localStorage
+      this.isLoggedIn = !!localStorage.getItem("authToken");
+    },
     logout() {
       // Xóa token khỏi localStorage
-      localStorage.removeItem('authToken');
-      
+      localStorage.removeItem("authToken");
+
       // Hiển thị thông báo đăng xuất thành công (tuỳ chọn)
       alert("Đăng xuất thành công");
-      
+
+      // Cập nhật trạng thái đăng nhập
+      this.checkAuthStatus();
+
       // Chuyển hướng đến trang đăng nhập
-      this.$router.push({ name: 'login' });
+      this.$router.push({ name: "login" });
     },
     goToProfile() {
       // Điều hướng đến trang thông tin nhân viên
-      this.$router.push({ name: 'profile' });
-    }
-  }
-}
+      this.$router.push({ name: "profile" });
+    },
+  },
+  created() {
+    // Kiểm tra trạng thái đăng nhập khi component được tạo
+    this.checkAuthStatus();
+  },
+  watch: {
+    // Theo dõi thay đổi của route, cập nhật trạng thái đăng nhập
+    $route() {
+      this.checkAuthStatus();
+    },
+  },
+};
 </script>
+
 
 <style scoped>
 .navbar {
@@ -90,5 +120,9 @@ export default {
 .dropdown-item:hover {
   background-color: #007bff; /* Màu nền xanh khi hover */
   color: white; /* Màu chữ trắng khi hover */
+}
+.btn-custom {
+  width: 120px; /* Đặt chiều rộng cố định */
+  text-align: center; /* Căn giữa nội dung */
 }
 </style>

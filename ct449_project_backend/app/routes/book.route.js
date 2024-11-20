@@ -16,4 +16,7 @@ router.route("/:id")
 router.route("/checkMasach")
     .post(books.checkMasach);
 
+router.route("/checkManxb")
+    .post(books.checkManxb);
+
 module.exports = router;

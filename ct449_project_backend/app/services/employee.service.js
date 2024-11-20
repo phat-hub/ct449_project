@@ -1,5 +1,5 @@
 const { ObjectId } = require("mongodb");
-
+const jwt = require("jsonwebtoken");
 class EmployeeService {
     constructor(client) {
         this.Employee = client.db().collection("Employees");
@@ -89,9 +89,11 @@ class EmployeeService {
     async login(msnv, password) {
         const employee = await this.findByMsnv(msnv);
         if (employee && employee.password === password) {
-            return true;
+            // Tạo token với payload là thông tin của employee
+            const token = jwt.sign({ msnv: employee.msnv }, "SECRET_KEY", { expiresIn: "1h" });
+            return { token }; // Trả về token
         } else {
-            return false;
+            return null;
         }
     }
 

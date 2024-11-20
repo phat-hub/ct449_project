@@ -80,6 +80,11 @@ class BookService {
         const book = await this.Book.findOne({ masach });
         return book ? true : false;
     }
+
+    async checkManxbInBooks(manxb) {
+        const books = await this.Book.find({ manxb: manxb }); // Tìm sách có manxb
+        return books.length > 0; // Nếu có sách nào có manxb này, trả về true
+    }
 }
 
 module.exports = BookService;

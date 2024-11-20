@@ -97,4 +97,21 @@ exports.checkMasach = async (req, res, next) => {
         return next(new ApiError(500, "An error occurred while checking masach"));
     }
 };
+exports.checkManxb = async (req, res, next) => {
+    try {
+        const { manxb } = req.body;
+        if (!manxb) {
+            return next(new ApiError(400, "Thiếu mã nhà xuất bản"));
+        }
 
+        const bookService = new BookService(MongoDB.client);
+        const exists = await bookService.checkManxbInBooks(manxb);
+
+        return res.send({
+            exists,
+            message: exists ? "Mã nhà xuất bản này đã được sử dụng trong mã sách" : "Mã nhà xuất bản này chưa được sử dụng",
+        });
+    } catch (error) {
+        return next(new ApiError(500, "An error occurred while checking manxb"));
+    }
+};

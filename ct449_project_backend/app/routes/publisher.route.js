@@ -13,4 +13,7 @@ router.route("/:id")
     .put(publishers.update)
     .delete(publishers.delete);
 
+router.route("/checkManxb")
+    .post(publishers.checkManxb);
+
 module.exports = router;

@@ -46,7 +46,7 @@ exports.update = async (req, res, next) => {
 };
 
 
-exports.login = async(req, res, next) => {
+exports.login = async (req, res, next) => {
     try {
         const { msnv, password } = req.body;
 
@@ -55,15 +55,25 @@ exports.login = async(req, res, next) => {
         }
 
         const employeeService = new EmployeeService(MongoDB.client);
-        const exists = await employeeService.login(msnv, password);
-        return res.send({
-            exists,
-            message: exists ? "Đăng nhập thành công" : "Đăng nhập thất bại",
-        });
+        const result = await employeeService.login(msnv, password);
+
+        if (result) {
+            return res.send({
+                success: true,
+                message: "Đăng nhập thành công",
+                token: result.token, // Gửi token về client
+            });
+        } else {
+            return res.send({
+                success: false,
+                message: "Tài khoản hoặc mật khẩu không chính xác",
+            });
+        }
     } catch (error) {
         return next(new ApiError(500, "An error occurred while login"));
     }
 };
+
 
 exports.checkMsnv = async (req, res, next) => {
     try {

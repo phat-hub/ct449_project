@@ -2,7 +2,7 @@
     <Form @submit="submitBook" :validation-schema="bookFormSchema">
         <div class="form-group">
             <label for="masach">Mã sách</label>
-            <Field name="masach" type="text" class="form-control" v-model="bookLocal.masach" />
+            <Field name="masach" type="text" class="form-control" v-model="bookLocal.masach" :disabled="bookLocal._id !== undefined"/>
             <ErrorMessage name="masach" class="error-feedback" />
         </div>
         <div class="form-group">
@@ -16,7 +16,7 @@
             <ErrorMessage name="dongia" class="error-feedback" />
         </div>
         <div class="form-group">
-            <label for="soquyen">Số quyền</label>
+            <label for="soquyen">Số quyển</label>
             <Field name="soquyen" type="number" class="form-control" v-model="bookLocal.soquyen" />
             <ErrorMessage name="soquyen" class="error-feedback" />
         </div>
@@ -65,8 +65,9 @@ export default {
             masach: yup
                 .string()
                 .required("Mã sách là bắt buộc.")
-                .min(2, "Mã sách phải ít nhất 2 ký tự.")
-                .max(50, "Mã sách có nhiều nhất 50 ký tự."),
+                .matches(/^S\d{3}$/, "Mã sách phải theo định dạng Sxxx, với x là chữ số.")
+                .min(2, "Mã sách phải ít nhất 4 ký tự.")
+                .max(4, "Mã sách có nhiều nhất 4 ký tự."),
             tensach: yup
                 .string()
                 .required("Tên sách là bắt buộc.")
@@ -74,14 +75,17 @@ export default {
                 .max(100, "Tên sách có nhiều nhất 100 ký tự."),
             dongia: yup
                 .number()
+                .transform(value => (isNaN(value) ? 0 : Number(value)))  // Nếu giá trị không hợp lệ, chuyển thành 0
                 .required("Đơn giá là bắt buộc.")
                 .positive("Đơn giá phải là một số dương."),
             soquyen: yup
                 .number()
-                .required("Số quyền là bắt buộc.")
-                .positive("Số quyền phải là một số dương."),
+                .transform(value => (isNaN(value) ? 0 : Number(value)))  // Nếu giá trị không hợp lệ, chuyển thành 0
+                .required("Số quyển là bắt buộc.")
+                .positive("Số quyển phải là một số dương."),
             namxuatban: yup
                 .number()
+                .transform(value => (isNaN(value) ? 0 : Number(value)))  // Nếu giá trị không hợp lệ, chuyển thành 0
                 .required("Năm xuất bản là bắt buộc.")
                 .min(1900, "Năm xuất bản không hợp lệ.")
                 .max(new Date().getFullYear(), "Năm xuất bản không thể lớn hơn năm hiện tại."),
