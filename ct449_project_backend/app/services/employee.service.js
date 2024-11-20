@@ -13,8 +13,7 @@ class EmployeeService {
             password: payload.password,
             chucvu: payload.chucvu,
             diachi: payload.diachi,
-            sodienthoai: payload.sodienthoai,
-            anhdaidien: payload.anhdaidien,
+            sodienthoai: payload.sodienthoai
         };
 
         // Xóa các trường undefined
@@ -90,10 +89,22 @@ class EmployeeService {
     async login(msnv, password) {
         const employee = await this.findByMsnv(msnv);
         if (employee && employee.password === password) {
-            return { message: "Đăng nhập thành công" };
+            return true;
         } else {
-            throw new Error("Thông tin đăng nhập không chính xác");
+            return false;
         }
+    }
+
+    async checkMsnv(msnv) {
+        const employee = await this.Employee.findOne({
+            msnv: new RegExp('^' + msnv + '$', 'i') // 'i' cho phép tìm kiếm không phân biệt hoa thường
+        });
+        return employee ? true : false;
+    }
+
+    async checkSodienthoai(sodienthoai) {
+        const employee = await this.Employee.findOne({ sodienthoai });
+        return employee ? true : false;
     }
 }
 

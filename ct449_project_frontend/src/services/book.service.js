@@ -1,6 +1,6 @@
 import createApiClient from "./api.service";
-class ContactService {
-    constructor(baseUrl = "/api/contacts") {
+class BookService {
+    constructor(baseUrl = "/api/books") {
         this.api = createApiClient(baseUrl);
     }
     async getAll() {
@@ -21,5 +21,11 @@ class ContactService {
     async delete(id) {
         return (await this.api.delete(`/${id}`)).data;
     }
+    async checkMsnv(msnv) {
+        return (await this.api.post("/checkMsnv", { msnv })).data;
+    }
+    async checkSodienthoai(sodienthoai) {
+        return (await this.api.post("/checkSodienthoai", { sodienthoai })).data;
+    }
 }
-export default new ContactService();
+export default new BookService();

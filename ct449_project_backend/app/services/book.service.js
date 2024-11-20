@@ -14,8 +14,7 @@ class BookService {
             soquyen: payload.soquyen,
             namxuatban: payload.namxuatban,
             manxb: payload.manxb,
-            tacgia: payload.tacgia,
-            hinhanh: payload.hinhanh
+            tacgia: payload.tacgia
         };
 
         // Remove undefined fields
@@ -75,6 +74,11 @@ class BookService {
     async deleteAll() {
         const result = await this.Book.deleteMany({});
         return result.deletedCount;
+    }
+
+    async checkMasach(masach) {
+        const book = await this.Book.findOne({ masach });
+        return book ? true : false;
     }
 }
 

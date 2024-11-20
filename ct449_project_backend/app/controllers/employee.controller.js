@@ -55,13 +55,50 @@ exports.login = async(req, res, next) => {
         }
 
         const employeeService = new EmployeeService(MongoDB.client);
-        const result = await employeeService.login(msnv, password);
-        res.send(result);
+        const exists = await employeeService.login(msnv, password);
+        return res.send({
+            exists,
+            message: exists ? "Đăng nhập thành công" : "Đăng nhập thất bại",
+        });
     } catch (error) {
-        if (error.message === "Thông tin đăng nhập không chính xác") {
-            return next(new ApiError(400, error.message)); // Trả về lỗi 400 với thông báo cụ thể
-        }
         return next(new ApiError(500, "An error occurred while login"));
     }
 };
 
+exports.checkMsnv = async (req, res, next) => {
+    try {
+        const { msnv } = req.body;
+        if (!msnv) {
+            return next(new ApiError(400, "Thiếu mã số nhân viên"));
+        }
+
+        const employeeService = new EmployeeService(MongoDB.client);
+        const exists = await employeeService.checkMsnv(msnv);
+
+        return res.send({
+            exists,
+            message: exists ? "Mã số nhân viên đã tồn tại" : "Mã số nhân viên chưa tồn tại",
+        });
+    } catch (error) {
+        return next(new ApiError(500, "An error occurred while checking msnv"));
+    }
+};
+
+exports.checkSodienthoai = async (req, res, next) => {
+    try {
+        const { sodienthoai } = req.body;
+        if (!sodienthoai) {
+            return next(new ApiError(400, "Thiếu số điện thoại"));
+        }
+
+        const employeeService = new EmployeeService(MongoDB.client);
+        const exists = await employeeService.checkSodienthoai(sodienthoai);
+
+        return res.send({
+            exists,
+            message: exists ? "Mã số nhân viên đã tồn tại" : "Mã số nhân viên chưa tồn tại",
+        });
+    } catch (error) {
+        return next(new ApiError(500, "An error occurred while checking sodienthoai"));
+    }
+};

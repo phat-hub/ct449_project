@@ -78,3 +78,23 @@ exports.deleteAll = async (req, res, next) => {
         return next(new ApiError(500, "An error occurred while removing all books"));
     }
 };
+
+exports.checkMasach = async (req, res, next) => {
+    try {
+        const { masach } = req.body;
+        if (!masach) {
+            return next(new ApiError(400, "Thiếu mã sách"));
+        }
+
+        const bookService = new BookService(MongoDB.client);
+        const exists = await bookService.checkMasach(masach);
+
+        return res.send({
+            exists,
+            message: exists ? "Mã sách đã tồn tại" : "Mã sách chưa tồn tại",
+        });
+    } catch (error) {
+        return next(new ApiError(500, "An error occurred while checking masach"));
+    }
+};
+

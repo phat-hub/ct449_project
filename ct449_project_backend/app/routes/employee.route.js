@@ -13,4 +13,10 @@ router.route("/:id")
 router.route("/login")
     .post(employees.login);
 
+router.route("/checkMsnv")
+  .post(employees.checkMsnv);
+
+router.route("/checkSodienthoai")
+  .post(employees.checkSodienthoai);
+
 module.exports = router;

@@ -13,4 +13,7 @@ router.route("/:id")
     .put(books.update)
     .delete(books.delete);
 
+router.route("/checkMasach")
+    .post(books.checkMasach);
+
 module.exports = router;
